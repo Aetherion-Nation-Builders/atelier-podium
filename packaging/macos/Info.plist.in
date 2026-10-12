@@ -7,9 +7,9 @@
   <key>CFBundleDevelopmentRegion</key>
   <string>en</string>
   <key>CFBundleDisplayName</key>
-  <string>DeckCraft</string>
+  <string>Atelier Podium</string>
   <key>CFBundleName</key>
-  <string>DeckCraft</string>
+  <string>Atelier Podium</string>
   <key>CFBundleExecutable</key>
   <string>DeckCraft</string>
   <key>CFBundleIdentifier</key>
@@ -43,7 +43,7 @@
   <key>NSRequiresAquaSystemAppearance</key>
   <false/>
   <key>NSHumanReadableCopyright</key>
-  <string>Copyright © the DeckCraft authors. MIT OR Apache-2.0.</string>
+  <string>Copyright © Aetherion Nation and the DeckCraft authors. MIT OR Apache-2.0.</string>
 
   <!-- DeckCraft's own format: a zip of a JSON manifest plus media. -->
   <key>UTExportedTypeDeclarations</key>
@@ -52,7 +52,7 @@
       <key>UTTypeIdentifier</key>
       <string>ai.storyteller.deckcraft.presentation</string>
       <key>UTTypeDescription</key>
-      <string>DeckCraft Presentation</string>
+      <string>Atelier Podium Presentation</string>
       <key>UTTypeConformsTo</key>
       <array>
         <string>public.data</string>
