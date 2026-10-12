@@ -1,11 +1,23 @@
+Atelier Podium
+Copyright (c) 2026 Aetherion Nation Builders.
+Licensed under the MIT License or the Apache License, Version 2.0, at your option
+(LICENSE-MIT, LICENSE-APACHE).
+
+Atelier Podium is built on DeckCraft (https://github.com/storytold/deckcraft) and carries
+DeckCraft's work forward under the same licenses. Files changed for Atelier are marked in the Git
+history of this repository (see docs/brand.md). The Atelier and Aetherion names and marks are not
+covered by the licenses above. The app icon in assets/app-icon/ is original work for Atelier
+Podium (MIT OR Apache-2.0).
+
+---- Upstream notice (DeckCraft) ----
+
 DeckCraft
 Copyright (c) 2026 ArtCraft Team and the DeckCraft contributors.
 Licensed under the MIT License or the Apache License, Version 2.0, at your option
 (LICENSE-MIT, LICENSE-APACHE).
 
-The ArtCraft name, wordmark and logos in docs/brand/ are trademarks of the ArtCraft Team. They are
-not open source and are not covered by the license above; their terms are in
-docs/brand/LICENSE-brand.txt.
+The ArtCraft name, wordmark and logos are trademarks of the ArtCraft Team, are not used by
+Atelier, and are not in this repository.
 
 Third-party material
 

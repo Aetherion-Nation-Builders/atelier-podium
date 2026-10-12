@@ -97,7 +97,7 @@ pub fn export(pres: &Presentation, opts: &PdfOptions) -> Result<Vec<u8>> {
     }
     let mut pdf = krilla::Document::new();
     let title = opts.title.clone().unwrap_or_else(|| pres.props.title.clone());
-    let mut meta = Metadata::new().creator("DeckCraft".into()).producer("DeckCraft".into());
+    let mut meta = Metadata::new().creator("Atelier Podium".into()).producer("Atelier Podium".into());
     if !title.trim().is_empty() {
         meta = meta.title(title);
     }
