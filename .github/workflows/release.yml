@@ -11,6 +11,10 @@
 # is optional: missing ones produce unsigned artifacts and a warning, never a failed build. The
 # other jobs sign nothing and get no secrets, so a workflow_dispatch from another branch is a dry
 # run: they build, the signed jobs are refused by the environment, and no release is drafted.
+#
+# Atelier: for now only the macOS DMG is built, on GitHub's standard macOS runner, unsigned until
+# signing secrets are added. The other platforms build when listed in the repository variable
+# ATELIER_RELEASE_PLATFORMS (e.g. "windows linux"): see docs/upstream.md.
 name: Release
 
 on:
@@ -68,12 +72,14 @@ jobs:
             echo "date=$(date -u +%Y-%m-%d)"
             echo "prerelease=$pre"
           } >>"$GITHUB_OUTPUT"
-          echo "### DeckCraft v$v (\`${GITHUB_SHA::9}\`)" >>"$GITHUB_STEP_SUMMARY"
+          echo "### Atelier Podium v$v (\`${GITHUB_SHA::9}\`)" >>"$GITHUB_STEP_SUMMARY"
 
   macos:
     name: macOS universal
     needs: version
-    runs-on: macos-15-xlarge  # M2 Pro larger runner; use only in release.yml (actions_macos_xl budget caps spend)
+    # Atelier: the standard runner (free on public repos). Upstream uses macos-15-xlarge, a larger
+    # runner that is billed even on public repos.
+    runs-on: macos-15
     environment: release
     env:
       DECKCRAFT_VERSION: ${{ needs.version.outputs.version }}
@@ -122,6 +128,9 @@ jobs:
   windows:
     name: Windows ${{ matrix.arch }}
     needs: version
+    # Atelier: macOS installers only for now. Add `windows` to the repository variable
+    # ATELIER_RELEASE_PLATFORMS (Settings › Secrets and variables › Actions) to build it again.
+    if: contains(vars.ATELIER_RELEASE_PLATFORMS, 'windows')
     runs-on: windows-latest
     environment: release
     strategy:
@@ -181,6 +190,9 @@ jobs:
   linux:
     name: Linux ${{ matrix.arch }}
     needs: version
+    # Atelier: macOS installers only for now. Add `linux` to the repository variable
+    # ATELIER_RELEASE_PLATFORMS (Settings › Secrets and variables › Actions) to build it again.
+    if: contains(vars.ATELIER_RELEASE_PLATFORMS, 'linux')
     # The oldest GitHub-hosted image, so the binaries only need glibc >= 2.35 (Ubuntu 22.04+,
     # Debian 12+, Fedora 36+, RHEL 10).
     runs-on: ${{ matrix.runner }}
@@ -245,6 +257,9 @@ jobs:
   flatpak:
     name: Flatpak ${{ matrix.arch }}
     needs: [version, linux]
+    # Atelier: macOS installers only for now. Add `linux` to the repository variable
+    # ATELIER_RELEASE_PLATFORMS (Settings › Secrets and variables › Actions) to build it again.
+    if: contains(vars.ATELIER_RELEASE_PLATFORMS, 'linux')
     # Repackages the Linux job's tarball (the same binaries as the AppImage/deb/rpm, with the
     # craft-fonts embedded); no Rust build here. packaging/linux/flatpak/ai.storyteller.deckcraft.yml
     # stays the from-source manifest for Flathub. 24.04 for a newer flatpak-builder (1.4) than
@@ -285,6 +300,9 @@ jobs:
   freebsd:
     name: FreeBSD x86_64
     needs: version
+    # Atelier: macOS installers only for now. Add `freebsd` to the repository variable
+    # ATELIER_RELEASE_PLATFORMS (Settings › Secrets and variables › Actions) to build it again.
+    if: contains(vars.ATELIER_RELEASE_PLATFORMS, 'freebsd')
     runs-on: ubuntu-latest
     # No `environment: release`: this job signs nothing, so it gets no release secrets.
     timeout-minutes: 240
@@ -331,6 +349,9 @@ jobs:
   web:
     name: Web (wasm)
     needs: version
+    # Atelier: macOS installers only for now. Add `web` to the repository variable
+    # ATELIER_RELEASE_PLATFORMS (Settings › Secrets and variables › Actions) to build it again.
+    if: contains(vars.ATELIER_RELEASE_PLATFORMS, 'web')
     runs-on: ubuntu-latest
     # No `environment: release`: this job signs nothing, so it gets no release secrets.
     env:
@@ -374,7 +395,10 @@ jobs:
     name: Draft GitHub Release
     # Every build is required, so the draft always has the full set the README lists. Needing the
     # signed jobs also keeps branch dry runs from drafting a release.
+    # Atelier: the platform jobs left out by ATELIER_RELEASE_PLATFORMS are skipped; this job runs
+    # as long as none of them failed and the macOS build succeeded.
     needs: [version, macos, windows, linux, flatpak, freebsd, web]
+    if: ${{ !cancelled() && !contains(needs.*.result, 'failure') && needs.macos.result == 'success' }}
     runs-on: ubuntu-latest
     environment: release
     permissions:
@@ -398,7 +422,7 @@ jobs:
         working-directory: artifacts
         run: |
           tag="v$VERSION"
-          title="DeckCraft v$VERSION"
+          title="Atelier Podium v$VERSION"
           pre=()
           if [ "$PRERELEASE" = true ]; then pre=(--prerelease); fi
           if draft="$(gh release view "$tag" --json isDraft --jq .isDraft 2>/dev/null)"; then

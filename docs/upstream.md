@@ -17,6 +17,12 @@ our header on top of upstream's feature sections, so upstream README edits merge
 line; if the header conflicts, keep ours. For anything else, keep upstream's logic and re-apply
 the rename.
 
-CI here is upstream's (`ci.yml` on every pull request, FreeBSD, packaging lint). Turned off in this
-repository, on purpose (it costs Actions minutes and builds things we do not ship yet):
-`release.yml`. Turn one on from the Actions tab when it is wanted.
+CI here is upstream's (`ci.yml` on every pull request, FreeBSD, packaging lint).
+
+`release.yml` builds the macOS DMG only for now, on the standard `macos-15` runner, unsigned until
+Apple signing secrets are added; the draft release is `Atelier Podium v<version>`, and publishing
+it makes it the release Atelier Gate installs. To cut one without the `release` branch: Actions ›
+Release › Run workflow on `main`. Its other platform jobs are kept from upstream and skipped unless
+named in the repository variable `ATELIER_RELEASE_PLATFORMS`; the DMG holds `Atelier Podium.app` on
+an `Atelier Podium` volume, with the Atelier background (`packaging/macos/dmg/`). When syncing,
+keep those lines of ours in `release.yml`, `packaging/macos/package.sh` and `packaging/macos/dmg/`.
