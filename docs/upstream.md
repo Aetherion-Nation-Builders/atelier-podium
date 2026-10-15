@@ -26,3 +26,8 @@ Release › Run workflow on `main`. Its other platform jobs are kept from upstre
 named in the repository variable `ATELIER_RELEASE_PLATFORMS`; the DMG holds `Atelier Podium.app` on
 an `Atelier Podium` volume, with the Atelier background (`packaging/macos/dmg/`). When syncing,
 keep those lines of ours in `release.yml`, `packaging/macos/package.sh` and `packaging/macos/dmg/`.
+
+Upstream now calls shared workflows from `storytold/craft-common-actions` (`freebsd.yml`,
+`packaging-lint.yml`, and its `release.yml`). Here they are pinned to a commit rather than
+`@main`; a sync moves the pin on purpose. Our `release.yml` keeps its own jobs instead of the
+shared one, which would build every platform on the larger runner as "DeckCraft".
