@@ -31,6 +31,7 @@ the Linux settings folder, and the docs under `docs/`.
 | PDF Creator and Producer | `crates/pdf/src/lib.rs` |
 | MCP and CLI | `crates/mcp/src/{server,backend}.rs`, `apps/deckcraft-cli/src/main.rs` |
 | Windows file properties | `apps/deckcraft/build.rs` |
+| Update check (Help › Check for Updates…, and at start-up) | `crates/ui-egui/src/updates_ui.rs` (`ATELIER_PODIUM`: our name and our repository's releases, never upstream's) |
 | macOS bundle | `packaging/macos/Info.plist.in` (display name, copyright, document type; identifier unchanged) |
 | Windows installer | `packaging/windows/deckcraft.wxs` (names, manufacturer, links, install folder, Open With name; ProgId and upgrade code unchanged) |
 | Linux desktop entry, AppStream, nfpm | `packaging/linux/ai.storyteller.deckcraft.*`, `nfpm.yaml` |
