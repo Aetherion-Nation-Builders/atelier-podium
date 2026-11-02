@@ -29,3 +29,5 @@ jobs:
     with:
       app-name: deckcraft
       app-dir: Atelier Podium
+      install-relative-path: Programs/Atelier/Atelier Podium
+      install-scope: perUser
