@@ -20,17 +20,17 @@ pub fn about(_app: &mut SlideApp, ui: &mut Ui) {
     ui.vertical_centered(|ui| {
         let (r, _) = ui.allocate_exact_size(vec2(64.0, 64.0), Sense::hover());
         paint_logo(ui.painter(), r);
-        ui.label(egui::RichText::new("DeckCraft").font(theme::bold(22.0)));
+        ui.label(egui::RichText::new("Atelier Podium").font(theme::bold(22.0)));
         ui.label(egui::RichText::new(version_line()).color(t.text_dim));
         ui.add_space(6.0);
-        ui.label("Presentations and slide shows, rebuilt from scratch in pure Rust.");
+        ui.label("The Nation's presentations and slide shows, built on DeckCraft by the ArtCraft team.");
         ui.label("An open-source, clean-room project. Not affiliated with Microsoft.");
         ui.add_space(6.0);
-        ui.hyperlink_to("Join our community on Discord", deckcraft_engine::links::DISCORD);
-        ui.hyperlink_to("getartcraft.com/apps/deckcraft", deckcraft_engine::links::APP_PAGE);
+        ui.hyperlink_to("Join the Nation", deckcraft_engine::links::DISCORD);
+        ui.hyperlink_to("aetherionnnation.com/atelier/podium", deckcraft_engine::links::APP_PAGE);
         ui.hyperlink_to("Source on GitHub", deckcraft_engine::links::GITHUB);
         ui.add_space(6.0);
-        ui.label(egui::RichText::new("MIT OR Apache-2.0 · © 2026 ArtCraft Team and the DeckCraft contributors").size(11.0).color(t.text_faint));
+        ui.label(egui::RichText::new("MIT OR Apache-2.0 · © 2026 Aetherion Nation and the DeckCraft contributors").size(11.0).color(t.text_faint));
     });
 }
 
@@ -49,20 +49,27 @@ pub fn version_line() -> String {
     s
 }
 
-/// DeckCraft's mark, drawn in code: a slide card with a play triangle in our orange.
+/// Atelier Podium's mark, drawn in code (see the comment inside).
 pub fn paint_logo(p: &egui::Painter, r: Rect) {
-    let orange = Color32::from_rgb(0xF2, 0x6B, 0x1D);
-    let deep = Color32::from_rgb(0xC2, 0x4E, 0x14);
-    let card = r.shrink(r.width() * 0.08);
-    p.rect_filled(card.translate(vec2(r.width() * 0.04, r.width() * 0.05)), CornerRadius::same((r.width() * 0.14) as u8), deep);
-    p.rect_filled(card, CornerRadius::same((r.width() * 0.14) as u8), orange);
-    let c = card.center();
-    let s = card.width() * 0.22;
-    p.add(egui::Shape::convex_polygon(
-        vec![pos2(c.x - s * 0.7, c.y - s), pos2(c.x + s, c.y), pos2(c.x - s * 0.7, c.y + s)],
-        Color32::WHITE,
-        Stroke::NONE,
-    ));
+    // The Atelier Podium icon (assets/app-icon/deckcraft.svg) drawn in code: the hidden sun behind
+    // a speaker's podium, on volcanic black.
+    let black = Color32::from_rgb(0x14, 0x12, 0x10);
+    let ivory = Color32::from_rgb(0xef, 0xe6, 0xd2);
+    let ochre = Color32::from_rgb(0xd9, 0xa4, 0x41);
+    let k = r.width() / 512.0;
+    let at = |x: f32, y: f32| pos2(r.min.x + x * k, r.min.y + y * k);
+    p.rect_filled(r, CornerRadius::same((112.0 * k) as u8), black);
+    p.circle_filled(at(256.0, 196.0), 126.0 * k, ivory);
+    // A black margin around the podium, then its desk, body and base.
+    p.rect_filled(Rect::from_min_max(at(110.0, 248.0), at(402.0, 460.0)), CornerRadius::same((12.0 * k) as u8), black);
+    for (shape, colour) in [
+        (vec![at(138.0, 262.0), at(374.0, 262.0), at(392.0, 306.0), at(120.0, 306.0)], ochre),
+        (vec![at(176.0, 316.0), at(336.0, 316.0), at(314.0, 410.0), at(198.0, 410.0)], ochre),
+        (vec![at(152.0, 424.0), at(360.0, 424.0), at(360.0, 446.0), at(152.0, 446.0)], ochre),
+        (vec![at(240.0, 330.0), at(272.0, 330.0), at(268.0, 394.0), at(244.0, 394.0)], black),
+    ] {
+        p.add(egui::Shape::convex_polygon(shape, colour, Stroke::NONE));
+    }
 }
 
 #[cfg(test)]
