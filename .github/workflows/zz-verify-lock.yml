@@ -1,0 +1,32 @@
+name: zz-verify-lock
+# Throwaway: regenerates actions.lock with gh-actions-lock and reports the diff as annotations.
+on:
+  push:
+    branches: ['verify/**']
+permissions:
+  contents: read
+jobs:
+  regen:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - run: gh extension install github/gh-actions-lock --pin v0.4.1
+      - name: Regenerate
+        run: |
+          rm -f .github/workflows/zz-verify-lock.yml
+          gh actions-lock || true
+          git diff -- .github > lock.diff
+          wc -c lock.diff
+          b=$(gzip -9c lock.diff | base64 -w0)
+          echo "len ${#b}"
+          i=0
+          while [ -n "$b" ] && [ $i -lt 9 ]; do
+            echo "::warning title=chunk$i::${b:0:3500}"
+            b=${b:3500}
+            i=$((i+1))
+          done
