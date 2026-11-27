@@ -47,7 +47,7 @@ Today it can:
   audio and video (MP3, AAC, FLAC, ALAC, Ogg, Opus, WAV, AIFF; H.264, HEVC, VP9, AV1).
 - **Present**: transitions (including Morph), entrance/emphasis/exit and motion-path animations,
   by-paragraph builds, full-screen slide show, presenter view, pen, rehearse timings, media playback.
-- **Exchange files**: open and save .pptx presentations, export PDF (slides, notes pages, handouts
+- **Exchange files**: open and save .pptx presentations, open PowerPoint 97–2003 .ppt/.pot/.pps files (import only: Save asks for a new name), export PDF (slides, notes pages, handouts
   with selectable text), PNG/JPEG, an animated GIF of the deck and outlines. Unsaved work is kept by AutoRecover.
 - **Automate**: 200+ commands with undo, all scriptable from the CLI, a JSON control channel and an
   MCP server for AI agents.
