@@ -19,7 +19,8 @@ jobs:
       - name: Regenerate
         run: |
           rm -f .github/workflows/zz-verify-lock.yml
-          gh actions-lock || true
+          gh actions-lock > out.txt 2>&1 || true
+          tail -c 3000 out.txt | tr '\n' '|' | sed 's/^/::error title=out::/'; echo
           git diff -- .github > lock.diff
           wc -c lock.diff
           b=$(gzip -9c lock.diff | base64 -w0)
